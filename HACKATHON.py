@@ -29,3 +29,5 @@ if st.session_state.page == 'main':
 
 #『結果の確認・情報リセット」の画面
 
+#テスト_春日井
+
