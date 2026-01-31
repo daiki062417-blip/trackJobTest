@@ -26,21 +26,23 @@ if st.session_state.page == 'main':
 elif st.session_state.page == 'task_input':
     st.header("タスク入力")
     st.write("引き継ぎたいタスクを入力してください")
+    
+    # フォーム外のボタン
     if st.button("ホームに戻る"):
         navigate_to('main')
+        st.rerun() # 画面を即座に切り替えるために追加
     
-    st.text_input("タスク名")
-    st.text_area("タスクの詳細")
-    st.text_area("タスクを行う時期・日時")
-
-    submitted = st.form_submit_button("提出")
-
-    if submitted:
-        navigate_to("main")
-
-        st.rerun()
+    # フォームの開始
+    with st.form(key='task_form'):
+        st.text_input("タスク名")
+        st.text_area("タスクの詳細")
+        st.text_area("タスクを行う時期・日時")
+        st.text_input("引き継ぎ担当者")
+        submitted = st.form_submit_button("提出")
+        if submitted:
+            st.session_state.page = "main" # navigate_toの代わりに直接代入
+            st.rerun()
     
-
 #「引き継ぎ希望申請」の画面
 
 
