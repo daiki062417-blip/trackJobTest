@@ -22,4 +22,10 @@ if st.session_state.page == 'main':
     if st.button('結果の確認・情報リセット'):
         navigate_to('results and reset ')
 
-#見えますか？
+#「タスク入力」の画面
+
+#「引き継ぎ希望申請」の画面
+
+
+#『結果の確認・情報リセット」の画面
+
