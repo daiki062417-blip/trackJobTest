@@ -20,3 +20,4 @@ if st.session_state.page == 'main':
         navigate_to('application')
     if st.button('結果の確認・情報リセット'):
         navigate_to('results and reset ')
+
