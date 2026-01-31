@@ -70,8 +70,14 @@ elif st.session_state.page == 'task_list':
         navigate_to('main')
         st.rerun()
 
-    
+    if os.path.isfile("tasks.csv"):
+        df = pd.read_csv("tasks.csv")
+        st.dataframe(df,use_container_width=True )
+        st.info(f"現在、{len(df)}件のタスクが登録されています。")
+    else:
+        st.warming("まだ登録されたタスクはありません")
 
+    
 #「引き継ぎ希望申請」の画面
 
 
