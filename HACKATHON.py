@@ -311,7 +311,7 @@ elif st.session_state.page == 'results_reset':
             st.warning("条件を満たす組み合わせが見つかりませんでした。評価を緩めるか、回答を増やしてください。")
 
     else:
-        st.error("データが見つかりません。tasks.csv と tasks2.csv の両方が必要です。")
+        st.error("データが見つかりません。tasks1.csv と tasks2.csv の両方が必要です。")
     
     st.divider()
     
