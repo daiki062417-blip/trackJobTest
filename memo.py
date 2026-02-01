@@ -56,28 +56,60 @@ def solve_matching(app_df, tasks_df):
 # 1. ページの設定
 st.set_page_config(page_title="引き継ぎ管理アプリ", page_icon="📝")
 
-# 2. デザイン（CSS）
+# 2. デザイン（CSS）- 極簡潔・ミニマルスタイル
 st.markdown("""
     <style>
-    .stApp { background-color: #fdfdfd; }
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
+    
+    .stApp { 
+        background-color: #ffffff;
+        font-family: 'Noto Sans JP', sans-serif;
+    }
+    
+    /* コンテナの幅を少し狭めて中央に寄せる */
+    .main .block-container {
+        max-width: 600px;
+        padding-top: 5rem;
+    }
+
+    /* タイトル：装飾を消してシンプルに */
+    h1 {
+        text-align: center;
+        color: #333;
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    /* ボタンのスタイル：フラットでシンプルな横長 */
     div.stButton > button {
-        border-radius: 12px;
-        border: 2px solid #6cace4;
-        background-color: white;
-        color: #6cace4;
-        font-weight: bold;
-        transition: 0.2s;
+        border-radius: 8px;
+        border: 1px solid #eee;
+        background-color: #fafafa;
+        color: #444;
         width: 100%;
-        margin-bottom: 10px;
+        height: 55px !important; /* 押しやすい適度な高さ */
+        margin-bottom: 12px;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important; /* 左寄せ */
+        padding-left: 25px !important;
     }
+
+    /* ホバー：色は変えず、影と境界線だけで「押せる感」を出す */
     div.stButton > button:hover {
-        background-color: #6cace4;
-        color: white;
+        border-color: #bbb;
+        background-color: #f0f0f0;
+        color: #000;
+        transform: none; /* 浮かび上がらせない */
     }
-    .stForm {
-        border: 2px solid #e0e0e0;
-        border-radius: 15px;
-        padding: 20px;
+
+    /* アイコン（絵文字）のサイズ調整 */
+    div.stButton > button p {
+        font-size: 1.2rem !important;
+        margin-right: 15px !important;
+        margin-top: 0 !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -88,22 +120,26 @@ if 'page' not in st.session_state:
 
 def navigate_to(page_name):
     st.session_state.page = page_name
-
-# --- ホーム画面 ---
+# --- ホーム画面（リスト形式） ---
 if st.session_state.page == 'main':
-    st.title("✨ 引き継ぎ管理アプリ ✨")
-    st.write("自分が行いたい業務を選んでください")
-    st.divider() 
-
+    st.markdown("<h1>引き継ぎ管理システム</h1>", unsafe_allow_html=True)
     
-    if st.button("📥 タスク入力"):
+    # 縦一列にシンプルに配置
+    if st.button("📥タスクを入力する"):
         navigate_to('task_input')
-    if st.button("📋 タスク一覧"):
+        st.rerun()
+        
+    if st.button("📋タスク一覧を確認する"):
         navigate_to('task_list')
-    if st.button("🙋 引き継ぎ希望申請"):
+        st.rerun()
+        
+    if st.button("🙋引き継ぎ希望を申請する"):
         navigate_to('application')
-    if st.button('🧹 最適な引き継ぎ先の確認・情報リセット'):
+        st.rerun()
+        
+    if st.button("🧹マッチング結果・リセット"):
         navigate_to('results_reset')
+        st.rerun()
 
 # --- 「タスク入力」画面 ---
 elif st.session_state.page == 'task_input':
