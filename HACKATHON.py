@@ -54,100 +54,135 @@ def solve_matching(app_df, tasks_df):
 
 
 # 1. ページの設定
-st.set_page_config(page_title="引き継ぎ管理アプリ", page_icon="📝")
+st.set_page_config(
+    page_title="引き継ぎ管理アプリ", 
+    page_icon="📝",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 # 2. デザイン（CSS）
 st.markdown("""
     <style>
     .stApp { background-color: #fdfdfd; }
+            
+     /* メインコンテナを中央揃え */
+    .main .block-container {
+        max-width: 1000px;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+            
+    /* タイトルを中央揃え */
+    h1 {
+        text-align: center;
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
     
+    /* サブタイトルを中央揃え */
+    .stApp > div > div > div > div > p {
+        text-align: center;
+    }
+    
+     /* ボタンのスタイル - カードっぽく */
     div.stButton > button {
-        border-radius: 12px;
+        border-radius: 15px;
         border: 2px solid #6cace4;
         background-color: white;
         color: #6cace4;
         font-weight: bold;
-        transition: 0.2s;
+        transition: all 0.3s ease;
         width: 100%;
-        margin-bottom: 10px;
-        min-height: 50px;
-        font-size: 16px;
+        min-height: 120px;
+        margin-bottom: 15px;
+        font-size: 18px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+    
     div.stButton > button:hover {
         background-color: #6cace4;
         color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(108, 172, 228, 0.3);
     }
+            
+     /* フォームのスタイル */
     .stForm {
         border: 2px solid #e0e0e0;
         border-radius: 15px;
         padding: 20px;
+        background-color: white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
             
-    /*タイトルのレスポンシブ対応*/
-    h1 {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
-            }
-
-
-    /*テーブルのレスポンシブ対応*/
-    [data-testid="stDataFrame"] {
+     /* Dividerのスタイル */
+    hr {
+        margin: 2rem 0;
+    }
+    
+    /* データフレーム・テーブルのスタイル */
+    [data-testid="stDataFrame"], .stTable {
         overflow-x: auto;
     }
             
-    /* モバイル対応（画面幅768px以下） */
-    @media (max-width: 768px) {
-        .stApp {
-            padding: 10px;
-        }
-            
+    
+    /* タブレット対応（768px以上） */
+    @media (min-width: 768px) {
         div.stButton > button {
-            font-size: 14px;
-            padding: 12px;
-            min-height: 48px;
+            min-height: 140px;
+            font-size: 20px;
         }
-            
-        .stForm {
-            padding: 15px;
-            margin: 10px 0;
-        }
-            
-    /*入力フィールドのフォントサイズ*/
-    input, textarea {
-        font-size: 16px !important;
     }
     
-    /*データフレームのフォントサイズ*/
-    [data-testid="stDataFrame"] {
+    /* モバイル対応（768px以下） */
+    @media (max-width: 768px) {
+        .main .block-container {
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+        }
+        
+        div.stButton > button {
+            min-height: 100px;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+        
+        .stForm {
+            padding: 15px;
+        }
+        
+        /* 入力フィールドのフォントサイズ（iOSズーム防止） */
+        input, textarea {
+            font-size: 16px !important;
+        }
+        
+        [data-testid="stDataFrame"], .stTable {
             font-size: 12px;
         }
-    }
-            
-    /* 小型モバイル対応（画面幅480px以下） */
-    @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            .stForm {
-                padding: 10px;
-            }
-
-            div.stButton > button {
-                font-size: 13px;
-                min-height: 44px;
-            }
-    }
-            
-    /* タブレット横向き対応（画面幅769px〜1024px） */
-    @media (min-width: 769px) and (max-width: 1024px) {
-        .stApp {
-            max-width: 900px;
-            margin: 0 auto;
+        
+        h2 {
+            font-size: 1.3rem;
         }
     }
-
+    
+    /* 小型モバイル対応（480px以下） */
+    @media (max-width: 480px) {
+        div.stButton > button {
+            min-height: 90px;
+            font-size: 15px;
+        }
+        
+        .stForm {
+            padding: 10px;
+        }
+    }
     </style>
     """, unsafe_allow_html=True)
+
+
 
 # 3. 状態管理とナビゲーション
 if 'page' not in st.session_state:
@@ -163,14 +198,31 @@ if st.session_state.page == 'main':
     st.divider() 
 
     
-    if st.button("📥 タスク入力"):
-        navigate_to('task_input')
-    if st.button("📋 タスク一覧"):
-        navigate_to('task_list')
-    if st.button("🙋 引き継ぎ希望申請"):
-        navigate_to('application')
-    if st.button('🧹 最適な引き継ぎ先の確認・情報リセット'):
-        navigate_to('results_reset')
+ # PC: 横3列、スマホ: 縦1列に自動調整
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        if st.button("📥\n\nタスク入力"):
+            navigate_to('task_input')
+            st.rerun()
+    
+    with col2:
+        if st.button("📋\n\nタスク一覧"):
+            navigate_to('task_list')
+            st.rerun()
+    
+    with col3:
+        if st.button("🙋\n\n引き継ぎ希望申請"):
+            navigate_to('application')
+            st.rerun()
+    
+    # 下段: 中央に配置
+    col_left, col_center, col_right = st.columns([1, 2, 1])
+    with col_center:
+        if st.button('🧹\n\n最適な引き継ぎ先の\n確認・情報リセット'):
+            navigate_to('results_reset')
+            st.rerun()
+
 
 # --- 「タスク入力」画面 ---
 elif st.session_state.page == 'task_input':
@@ -233,19 +285,18 @@ elif st.session_state.page == 'task_list':
 
 #『最適な引き継ぎ先の確認・情報リセット」の画面
 
-#画面部分のコード
 elif st.session_state.page == 'results_reset':
-    st.title("最適な引き継ぎ先の確認・情報リセット")
+    st.title("🧹 最適な引き継ぎ先の確認・情報リセット")
 
     if st.button("🏠 ホームに戻る"):
-        st.session_state.page = 'main'
+        navigate_to('main')
         st.rerun()
 
     if os.path.isfile("tasks.csv") and os.path.isfile("tasks2.csv"):
         df1 = pd.read_csv("tasks.csv")
         df2 = pd.read_csv("tasks2.csv")
 
-        st.subheader("最適な引き継ぎ先一覧")
+        st.subheader("📊 最適な引き継ぎ先一覧")
 
         best_pairing, total_score = solve_matching(df2, df1)
         if best_pairing:
@@ -257,29 +308,14 @@ elif st.session_state.page == 'results_reset':
             st.warning("条件を満たす組み合わせが見つかりませんでした。評価を緩めるか、回答を増やしてください。")
 
     else:
-        st.error("データが見つかりません。")
-        
-    if st.button("データのリセット"):
-        if os.path.exists("tasks.csv"): os.remove("tasks.csv")
-        if os.path.exists("tasks2.csv"): os.remove("tasks2.csv")
+        st.error("データが見つかりません。tasks.csv と tasks2.csv の両方が必要です。")
+    
+    st.divider()
+    
+    if st.button("🗑️ データのリセット", type="secondary"):
+        if os.path.exists("tasks.csv"): 
+            os.remove("tasks.csv")
+        if os.path.exists("tasks2.csv"): 
+            os.remove("tasks2.csv")
         st.warning("全てのデータを削除しました。")
-        st.rerun()
-
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
-        st.rerun()
-
-
-# --- 「引き継ぎ希望申請」画面 ---
-elif st.session_state.page == 'application':
-    st.title("🙋 引き継ぎ希望申請")
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
-        st.rerun()
-
-# --- 「最適な引き継ぎ先の確認・情報リセット」画面 ---
-elif st.session_state.page == 'results_reset':
-    st.title("🧹 最適な引き継ぎ先の確認・情報リセット")
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
         st.rerun()
