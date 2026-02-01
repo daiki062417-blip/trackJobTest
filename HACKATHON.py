@@ -68,8 +68,9 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600;700&display=swap');
     
     .stApp { 
-        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 35%);
+        background: radial-gradient(circle at 20% 20%, #132b55 0%, #0b1b3d 40%, #0a1633 100%);
         font-family: 'Inter', 'Noto Sans JP', sans-serif;
+        color: #e5ecf6;
     }
     
     /* メインコンテナを中央に */
@@ -87,7 +88,7 @@ st.markdown("""
         font-family: 'Noto Serif JP', serif;
         font-weight: 700;
         font-size: 2rem;
-        color: #2c3e50;
+        color: #e5ecf6;
         text-align: center;
         margin-bottom: 2rem;
         letter-spacing: 0.1em;
@@ -96,7 +97,7 @@ st.markdown("""
     /* 通常のタイトル（h1）：中央揃え */
     h1 {
         text-align: center;
-        color: #333;
+        color: #e5ecf6;
         font-size: 1.9rem;
         margin-bottom: 2rem;
         font-family: 'Noto Sans JP', sans-serif;
@@ -132,32 +133,33 @@ st.markdown("""
 
     /* ボタン本体のスタイル */
     div.stButton > button {
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        background-color: #ffffff;
-        color: #1f2937;
+        border-radius: 14px;
+        border: 1px solid #1d3f80;
+        background: linear-gradient(180deg, #1b3c76 0%, #123066 100%);
+        color: #e5ecf6;
         width: 100% !important;
         max-width: 420px !important;
-        height: 56px !important;
-        min-height: 56px !important;
+        height: 150px !important;
+        min-height: 150px !important;
         margin: 0 auto !important;
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 600;
+        letter-spacing: 0.01em;
         transition: all 0.2s ease;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 20px !important;
+        padding: 0 22px !important;
         text-align: center;
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        box-shadow: 0 18px 45px rgba(6, 13, 26, 0.28);
     }
 
     /* ホバー効果 */
     div.stButton > button:hover {
-        border-color: #94a3b8;
-        background-color: #f1f5f9;
-        color: #0f172a;
-        transform: translateY(-2px);
+        border-color: #2a58a2;
+        background: linear-gradient(180deg, #245092 0%, #1a3e78 100%);
+        color: #f5f7fb;
+        transform: translateY(-3px);
     }
 
     /* ボタン内のテキスト */
@@ -181,11 +183,11 @@ st.markdown("""
     /* 入力要素とフォーム */
     [data-testid="stForm"] > div {
         width: 100%;
-        background: #f8fafc;
-        border: 1px solid #e5e7eb;
+        background: #0f213f;
+        border: 1px solid #1e3c70;
         border-radius: 16px;
         padding: 1.5rem !important;
-        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+        box-shadow: 0 16px 40px rgba(2, 6, 16, 0.45);
     }
 
     label p {
@@ -195,9 +197,10 @@ st.markdown("""
 
     .stTextInput input, .stTextArea textarea {
         border-radius: 10px !important;
-        border: 1px solid #e2e8f0 !important;
+        border: 1px solid #1e3c70 !important;
         padding: 0.75rem 0.85rem !important;
-        background: #ffffff !important;
+        background: #0c1b35 !important;
+        color: #e5ecf6 !important;
     }
 
     .stSlider [role="slider"] {
@@ -209,6 +212,21 @@ st.markdown("""
         border-radius: 14px;
         overflow: hidden;
         box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
+    /* ホームボタン用の4列レイアウト */
+    .home-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        width: 100%;
+        max-width: 1050px;
+        margin: 0 auto;
+    }
+
+    .home-grid .stButton button {
+        height: 180px !important;
+        min-height: 180px !important;
     }
 
     /* タブレット・スマホ（768px以下）向けの微調整 */
@@ -224,11 +242,16 @@ st.markdown("""
             font-size: 1.55rem;
         }
         
+        .home-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
         div.stButton > button {
             width: 100% !important;
             max-width: 100% !important;
-            height: 52px !important;
-            min-height: 52px !important;
+            height: 150px !important;
+            min-height: 150px !important;
             font-size: 15px;
         }
     }
@@ -248,24 +271,23 @@ if st.session_state.page == 'main':
     st.markdown("<h1 class='custom-title'>引き継ぎ管理システム</h1>", unsafe_allow_html=True)
     
     # 中央揃え用のコンテナを作成
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        if st.button("📥 タスクを入力する"):
-            navigate_to('task_input')
-            st.rerun()
-            
-        if st.button("📋 タスク一覧を確認する"):
-            navigate_to('task_list')
-            st.rerun()
-            
-        if st.button("🙋 引き継ぎ希望を申請する"):
-            navigate_to('application')
-            st.rerun()
-            
-        if st.button("🧹 マッチング結果・リセット"):
-            navigate_to('results_reset')
-            st.rerun()
+    st.markdown("<div class='home-grid'>", unsafe_allow_html=True)
+    if st.button("📥 タスクを入力する", key="home_task_input"):
+        navigate_to('task_input')
+        st.rerun()
+        
+    if st.button("📋 タスク一覧を確認する", key="home_task_list"):
+        navigate_to('task_list')
+        st.rerun()
+        
+    if st.button("🙋 引き継ぎ希望を申請する", key="home_application"):
+        navigate_to('application')
+        st.rerun()
+        
+    if st.button("🧹 マッチング結果・リセット", key="home_results_reset"):
+        navigate_to('results_reset')
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # 「タスク入力」画面
