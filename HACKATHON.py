@@ -4,11 +4,11 @@ import os
 import itertools
 
 #先にモデルを組む
-def solve_matching(app_df, tasks_df):
+def solve_matching(df2, df1):
     w1, w2, w3 = 0.5, 3.0, 1.0
 
     valid_candidates = []
-    for _, row in app_df.iterrows():
+    for _, row in df2.iterrows():
         t_eval = row['タスクの内容に関する10段階評価']
         p_eval = row['引き継ぎ相手に関する10段階評価']
         s_eval = row['スケジュールに関する評価']
@@ -24,8 +24,8 @@ def solve_matching(app_df, tasks_df):
             'score': score
         })
     
-    all_tasks = tasks_df['タスク名'].unique()
-    all_people = app_df['人名'].unique()
+    all_tasks = df1['タスク名'].unique()
+    all_people = df2['人名'].unique()
     
     best_total_score = -1
     best_combination = []
@@ -221,14 +221,14 @@ elif st.session_state.page == 'application':
         st.rerun()
 
     # 登録タスクの表示
-    if os.path.isfile("tasks.csv"):
-        df = pd.read_csv("tasks.csv")
+    if os.path.isfile("tasks1.csv"):
+        df1 = pd.read_csv("tasks1.csv")
         
         st.subheader("📋 対象タスク情報")
-        st.write("**タスク名:** " + str(df.loc[0, "タスク名"])) 
-        st.write("**タスクの詳細:** " + str(df.loc[0, "タスクの詳細"]))
-        st.write("**タスクを行う時期・日時:** " + str(df.loc[0, "タスクを行う時期・日時"]))
-        st.write("**引き継ぎ担当者:** " + str(df.loc[0, "引き継ぎ担当者"]))
+        st.write("**タスク名:** " + str(df1.loc[0, "タスク名"])) 
+        st.write("**タスクの詳細:** " + str(df1.loc[0, "タスクの詳細"]))
+        st.write("**タスクを行う時期・日時:** " + str(df1.loc[0, "タスクを行う時期・日時"]))
+        st.write("**引き継ぎ担当者:** " + str(df1.loc[0, "引き継ぎ担当者"]))
         
         st.divider()
 
@@ -262,9 +262,10 @@ elif st.session_state.page == 'application':
                         personIndex = 1
                     
                     data2 = pd.DataFrame(
-                        [["匿名" + str(personIndex), df.loc[0, "タスク名"], contentValue, personValue, scheduleValue]], 
+                        [["匿名" + str(personIndex), df1.loc[0, "タスク名"], contentValue, personValue, scheduleValue]], 
                         columns=["人名", "タスク名", "タスクの内容に関する10段階評価", "引き継ぎ相手に関する10段階評価", "スケジュールに関する評価"]
                     )  
+
 #「引き継ぎ希望申請」の画面
 elif st.session_state.page == 'application':
     st.title("🙋 引き継ぎ希望申請")
@@ -275,22 +276,22 @@ elif st.session_state.page == 'application':
     st.title("引継ぎ希望申請")
 
     #登録タスクの表示
-    if os.path.isfile("tasks.csv"):
+    if os.path.isfile("tasks1.csv"):
 
             #人名
             name = st.text_input("名前")
 
             #ファイル読み込み
-            df = pd.read_csv("tasks.csv")
+            df1 = pd.read_csv("tasks1.csv")
 
             #全タスクの評価欄を表示
-            for i in range(len(df)):
+            for i in range(len(df1)):
 
                 #タスク表示
-                st.write("タスク名: " +str( df.loc[i, "タスク名"]) ) 
-                st.write("タスクの詳細: " + str( df.loc[i, "タスクの詳細"] ) )
-                st.write("タスクを行う時期・日時: " + str( df.loc[i, "タスクを行う時期・日時"] ) )
-                st.write("引き継ぎ担当者: " +str(  df.loc[i, "引き継ぎ担当者"] ) )
+                st.write("タスク名: " +str( df1.loc[i, "タスク名"]) ) 
+                st.write("タスクの詳細: " + str( df1.loc[i, "タスクの詳細"] ) )
+                st.write("タスクを行う時期・日時: " + str( df1.loc[i, "タスクを行う時期・日時"] ) )
+                st.write("引き継ぎ担当者: " +str(  df1.loc[i, "引き継ぎ担当者"] ) )
 
                 #提出フォーム
                 with st.form(key='evaluate_form' + str(i)):
@@ -319,7 +320,7 @@ elif st.session_state.page == 'application':
                             
                             #評価データ
                             data2 = pd.DataFrame(
-                                    [[name, str( df.loc[i, "タスク名"]), contentValue, personValue, scheduleValue]], 
+                                    [[name, str( df1.loc[i, "タスク名"]), contentValue, personValue, scheduleValue]], 
                                     columns=["人名","タスク名","タスクの内容に関する10段階評価","引き継ぎ相手に関する10段階評価", "スケジュールに関する評価"]
                                 )  
 
@@ -341,31 +342,47 @@ elif st.session_state.page == 'application':
         st.rerun()
 
 
-    # --- 「最適な引き継ぎ先の確認・情報リセット」画面 ---
-    if os.path.isfile("tasks1.csv") and os.path.isfile("tasks2.csv"):
-        df1 = pd.read_csv("tasks1.csv")
-        df2 = pd.read_csv("tasks2.csv")
+
+
+#『最適な引き継ぎ先の確認・情報リセット」の画面
+elif st.session_state.page == 'results_reset':
+    st.title("最適な引き継ぎ先の確認・情報リセット")
+
+    # ボタンの重複エラーを防ぐため、1つに絞り、かつユニークな key を設定します
+    if st.button("🏠 ホームに戻る", key="back_home_res_page"):
+        st.session_state.page = 'main'
+        st.rerun()
+
+    if os.path.isfile("tasks.csv") and os.path.isfile("tasks2.csv"):
+        df1 = pd.read_csv("tasks.csv") # タスクデータ
+        df2 = pd.read_csv("tasks2.csv") # 評価データ
 
         st.subheader("📊 最適な引き継ぎ先一覧")
 
-        best_pairing, total_score = solve_matching(df2, df1)
-        if best_pairing:
-            st.success(f"全体の合計スコアが最大（{round(total_score, 2)}点）になる組み合わせを算出しました！")
-            result_df = pd.DataFrame(best_pairing)
-            st.table(result_df)
+        # solve_matching関数を呼び出し（df2, df1の順で渡す）
+        # ※関数側の列名と、tasks2.csvの列名が一致している必要があります
+        try:
+            best_pairing, total_score = solve_matching(df2, df1)
+            
+            if best_pairing:
+                st.success(f"全体の合計スコアが最大（{round(total_score, 2)}点）になる組み合わせを算出しました！")
+                result_df = pd.DataFrame(best_pairing)
+                st.table(result_df)
+            else:
+                st.warning("条件を満たす組み合わせが見つかりませんでした。評価を緩めるか、回答を増やしてください。")
         
-        else:
-            st.warning("条件を満たす組み合わせが見つかりませんでした。評価を緩めるか、回答を増やしてください。")
+        except KeyError as e:
+            st.error(f"データの項目名が一致しません: {e}")
+            st.info("一度『データのリセット』を行ってから、最新の形式で入力し直してみてください。")
 
     else:
-        st.error("データが見つかりません")
+        st.error("計算に必要なデータ（tasks.csv または tasks2.csv）が見つかりません。")
+        
+    st.divider() # 視覚的な区切り線
     
-    st.divider()
-    
-    if st.button("🗑️ データのリセット", type="secondary"):
-        if os.path.exists("tasks.csv"): 
-            os.remove("tasks.csv")
-        if os.path.exists("tasks2.csv"): 
-            os.remove("tasks2.csv")
+    # リセットボタンにも key を追加
+    if st.button("🗑️ データのリセット", key="reset_all_data_btn"):
+        if os.path.exists("tasks.csv"): os.remove("tasks.csv")
+        if os.path.exists("tasks2.csv"): os.remove("tasks2.csv")
         st.warning("全てのデータを削除しました。")
         st.rerun()
