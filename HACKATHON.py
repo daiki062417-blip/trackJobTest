@@ -65,19 +65,19 @@ st.set_page_config(
 st.markdown("""
     <style>
     /* タイトル用の特別なフォントを読み込み */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600;700&display=swap');
     
     .stApp { 
-        background-color: #ffffff;
-        font-family: 'Noto Sans JP', sans-serif;
+        background: linear-gradient(180deg, #f8fafc 0%, #ffffff 35%);
+        font-family: 'Inter', 'Noto Sans JP', sans-serif;
     }
     
     /* メインコンテナを中央に */
     .main .block-container {
-        max-width: 600px !important;
-        padding-top: 5rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
+        max-width: 880px !important;
+        padding-top: 4.5rem;
+        padding-left: 2.5rem;
+        padding-right: 2.5rem;
         margin-left: auto !important;
         margin-right: auto !important;
     }
@@ -97,14 +97,14 @@ st.markdown("""
     h1 {
         text-align: center;
         color: #333;
-        font-size: 1.8rem;
+        font-size: 1.9rem;
         margin-bottom: 2rem;
         font-family: 'Noto Sans JP', sans-serif;
     }
 
     /* Streamlitの縦方向のブロックを中央揃えに強制 */
     [data-testid="stVerticalBlock"] {
-        gap: 0 !important;
+        gap: 1.2rem !important;
     }
     
     [data-testid="stVerticalBlock"] > div {
@@ -124,7 +124,7 @@ st.markdown("""
     /* ボタンコンテナを中央に配置 */
     div.stButton {
         width: 100% !important;
-        max-width: 500px !important;
+        max-width: 420px !important;
         display: flex !important;
         justify-content: center !important;
         margin: 0 auto 12px auto !important;
@@ -132,30 +132,32 @@ st.markdown("""
 
     /* ボタン本体のスタイル */
     div.stButton > button {
-        border-radius: 8px;
-        border: 1px solid #eee;
-        background-color: #fafafa;
-        color: #444;
-        width: 500px !important;
-        max-width: 500px !important;
-        height: 55px !important;
-        min-height: 55px !important;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        background-color: #ffffff;
+        color: #1f2937;
+        width: 100% !important;
+        max-width: 420px !important;
+        height: 56px !important;
+        min-height: 56px !important;
         margin: 0 auto !important;
         font-size: 16px;
-        font-weight: 400;
+        font-weight: 600;
         transition: all 0.2s ease;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         padding: 0 20px !important;
         text-align: center;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
     }
 
     /* ホバー効果 */
     div.stButton > button:hover {
-        border-color: #bbb;
-        background-color: #f0f0f0;
-        color: #000;
+        border-color: #94a3b8;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        transform: translateY(-2px);
     }
 
     /* ボタン内のテキスト */
@@ -176,24 +178,57 @@ st.markdown("""
         justify-content: center !important;
     }
             
+    /* 入力要素とフォーム */
+    [data-testid="stForm"] > div {
+        width: 100%;
+        background: #f8fafc;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 1.5rem !important;
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+    }
+
+    label p {
+        font-weight: 600 !important;
+        color: #0f172a !important;
+    }
+
+    .stTextInput input, .stTextArea textarea {
+        border-radius: 10px !important;
+        border: 1px solid #e2e8f0 !important;
+        padding: 0.75rem 0.85rem !important;
+        background: #ffffff !important;
+    }
+
+    .stSlider [role="slider"] {
+        background: #0f766e !important;
+    }
+
+    /* データフレームの余白 */
+    .stDataFrame {
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
+    }
+
     /* タブレット・スマホ（768px以下）向けの微調整 */
     @media (max-width: 768px) {
         .main .block-container {
-            padding-top: 2rem;
-            padding-left: 1rem;
-            padding-right: 1rem;
+            padding-top: 2.5rem;
+            padding-left: 1.2rem;
+            padding-right: 1.2rem;
             max-width: 100% !important;
         }
         
         .custom-title {
-            font-size: 1.5rem;
+            font-size: 1.55rem;
         }
         
         div.stButton > button {
             width: 100% !important;
             max-width: 100% !important;
-            height: 50px !important;
-            min-height: 50px !important;
+            height: 52px !important;
+            min-height: 52px !important;
             font-size: 15px;
         }
     }
@@ -265,6 +300,7 @@ elif st.session_state.page == 'task_input':
             # 2. 演出と完了通知
             st.balloons()
             st.success("タスクが正常に保存されました")
+            st.info("提出されました")
             
             # 3. 最後に画面を切り替える
             navigate_to('main')
