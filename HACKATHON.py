@@ -9,6 +9,7 @@ st.set_page_config(page_title="引き継ぎ管理アプリ", page_icon="📝")
 st.markdown("""
     <style>
     .stApp { background-color: #fdfdfd; }
+    
     div.stButton > button {
         border-radius: 12px;
         border: 2px solid #6cace4;
@@ -18,6 +19,8 @@ st.markdown("""
         transition: 0.2s;
         width: 100%;
         margin-bottom: 10px;
+        min-height: 50px;
+        font-size: 16px;
     }
     div.stButton > button:hover {
         background-color: #6cace4;
@@ -28,6 +31,70 @@ st.markdown("""
         border-radius: 15px;
         padding: 20px;
     }
+            
+    /*タイトルのレスポンシブ対応*/
+    h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            }
+
+
+    /*テーブルのレスポンシブ対応*/
+    [data-testid="stDataFrame"] {
+        overflow-x: auto;
+    }
+            
+    /* モバイル対応（画面幅768px以下） */
+    @media (max-width: 768px) {
+        .stApp {
+            padding: 10px;
+        }
+            
+        div.stButton > button {
+            font-size: 14px;
+            padding: 12px;
+            min-height: 48px;
+        }
+            
+        .stForm {
+            padding: 15px;
+            margin: 10px 0;
+        }
+            
+    /*入力フィールドのフォントサイズ*/
+    input, textarea {
+        font-size: 16px !important;
+    }
+    
+    /*データフレームのフォントサイズ*/
+    [data-testid="stDataFrame"] {
+            font-size: 12px;
+        }
+    }
+            
+    /* 小型モバイル対応（画面幅480px以下） */
+    @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .stForm {
+                padding: 10px;
+            }
+
+            div.stButton > button {
+                font-size: 13px;
+                min-height: 44px;
+            }
+    }
+            
+    /* タブレット横向き対応（画面幅769px〜1024px） */
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .stApp {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    }
+
     </style>
     """, unsafe_allow_html=True)
 
