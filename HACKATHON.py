@@ -57,90 +57,147 @@ def solve_matching(app_df, tasks_df):
 st.set_page_config(
     page_title="引き継ぎ管理アプリ", 
     page_icon="📝",
-    layout="wide",
+    layout="centered",
     initial_sidebar_state="collapsed"
 )
 
-# 2. デザイン（CSS）- 極簡潔・ミニマルスタイル
+# 2. デザイン（CSS）- 強制的に中央揃え
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap');
+    /* タイトル用の特別なフォントを読み込み */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600;700&display=swap');
     
     .stApp { 
         background-color: #ffffff;
         font-family: 'Noto Sans JP', sans-serif;
     }
     
-    /* コンテナを中央揃えに */
+    /* メインコンテナを中央に */
     .main .block-container {
-        max-width: 600px;
+        max-width: 600px !important;
         padding-top: 5rem;
-        margin: 0 auto;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
-    /* タイトル：装飾を消してシンプルに */
+    
+    /* タイトル専用スタイル（明朝体・セリフ体） */
+    .custom-title {
+        font-family: 'Noto Serif JP', serif;
+        font-weight: 700;
+        font-size: 2rem;
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 0.1em;
+    }
+    
+    /* 通常のタイトル（h1）：中央揃え */
     h1 {
         text-align: center;
         color: #333;
         font-size: 1.8rem;
-        margin-bottom: 2rem;
+        margin-bottom: 4rem;
+        font-family: 'Noto Sans JP', sans-serif;
+        
     }
 
-     /* ボタンコンテナを中央揃えに */
-    .stButton {
-        display: flex;
-        justify-content: center;  /* 中央揃え */
-        margin: 0 auto;
+    /* Streamlitの縦方向のブロックを中央揃えに強制 */
+    [data-testid="stVerticalBlock"] {
+        gap: 0 !important;
     }
-            
+    
+    [data-testid="stVerticalBlock"] > div {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
 
+    /* ボタンの親要素を中央揃えに */
+    .element-container {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
 
-     /* ボタンのスタイル */
+    /* ボタンコンテナを中央に配置 */
+    div.stButton {
+        width: 100% !important;
+        max-width: 500px !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin: 0 auto 12px auto !important;
+    }
+
+    /* ボタン本体のスタイル */
     div.stButton > button {
         border-radius: 8px;
         border: 1px solid #eee;
         background-color: #fafafa;
         color: #444;
-        width: 100%;
-        max-width: 500px;  /* 最大幅を設定 */
+        width: 500px !important;
+        max-width: 500px !important;
         height: 55px !important;
-        margin: 0 auto 12px auto;  /* 中央揃え + 下マージン */
+        min-height: 55px !important;
+        margin: 0 auto !important;
         font-size: 16px;
+        font-weight: 400;
         transition: all 0.2s ease;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 !important;
+        padding: 0 20px !important;
+        text-align: center;
     }
 
-
-    /* ホバー*/
+    /* ホバー効果 */
     div.stButton > button:hover {
         border-color: #bbb;
         background-color: #f0f0f0;
         color: #000;
-        transform: none; /* 浮かび上がらせない */
+    }
+
+    /* ボタン内のテキスト */
+    div.stButton > button > div {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
     }
 
     /* アイコン（絵文字）のサイズ調整 */
     div.stButton > button p {
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
         margin: 0 !important;
         padding: 0 !important;
         display: flex !important;
         align-items: center !important;
+        justify-content: center !important;
     }
             
     /* タブレット・スマホ（768px以下）向けの微調整 */
-@media (max-width: 768px) {
-    .main .block-container {
-        padding-top: 2rem; /* 上下の余白を少し詰める */
+    @media (max-width: 768px) {
+        .main .block-container {
+            padding-top: 2rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            max-width: 100% !important;
+        }
+        
+        .custom-title {
+            font-size: 1.5rem;
+        }
+        
+        div.stButton > button {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 50px !important;
+            min-height: 50px !important;
+            font-size: 15px;
+        }
     }
-    div.stButton > button {
-        height: 50px !important;
-        font-size: 15px; /* 文字サイズをスマホ最適化 */
-        padding-left: 15px !important; /* 左の余白を少し詰める */
-    }
-}
     </style>
     """, unsafe_allow_html=True)
 
@@ -151,29 +208,33 @@ if 'page' not in st.session_state:
 def navigate_to(page_name):
     st.session_state.page = page_name
 
-#ホーム画面（リスト形式
+# ホーム画面（リスト形式）
 if st.session_state.page == 'main':
-    st.markdown("<h1>引き継ぎ管理システム</h1>", unsafe_allow_html=True)
+    # カスタムフォントのタイト
+    st.markdown("<h1 class='custom-title'>引き継ぎ管理システム</h1>", unsafe_allow_html=True)
     
-    # 縦一列にシンプルに配置
-    if st.button("📥 タスクを入力する"):
-        navigate_to('task_input')
-        st.rerun()
-        
-    if st.button("📋 タスク一覧を確認する"):
-        navigate_to('task_list')
-        st.rerun()
-        
-    if st.button("🙋 引き継ぎ希望を申請する"):
-        navigate_to('application')
-        st.rerun()
-        
-    if st.button("🧹 マッチング結果・リセット"):
-        navigate_to('results_reset')
-        st.rerun()
+    # 中央揃え用のコンテナを作成
+    col1, col2, col3 = st.columns([1, 2, 1])
+    
+    with col2:
+        if st.button("📥 タスクを入力する"):
+            navigate_to('task_input')
+            st.rerun()
+            
+        if st.button("📋 タスク一覧を確認する"):
+            navigate_to('task_list')
+            st.rerun()
+            
+        if st.button("🙋 引き継ぎ希望を申請する"):
+            navigate_to('application')
+            st.rerun()
+            
+        if st.button("🧹 マッチング結果・リセット"):
+            navigate_to('results_reset')
+            st.rerun()
 
 
-#「タスク入力」画面
+# 「タスク入力」画面
 elif st.session_state.page == 'task_input':
     st.title("📥 タスク入力")
     
