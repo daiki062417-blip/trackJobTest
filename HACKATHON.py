@@ -68,14 +68,14 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+JP:wght@400;500&family=Noto+Serif+JP:wght@600;700&display=swap');
     
     .stApp { 
-        background: radial-gradient(circle at 20% 20%, #132b55 0%, #0b1b3d 40%, #0a1633 100%);
+        background: linear-gradient(180deg, #f7f9fc 0%, #ffffff 55%, #fef9ec 100%);
         font-family: 'Inter', 'Noto Sans JP', sans-serif;
-        color: #e5ecf6;
+        color: #0f172a;
     }
     
     /* メインコンテナを中央に */
     .main .block-container {
-        max-width: 880px !important;
+        max-width: 960px !important;
         padding-top: 4.5rem;
         padding-left: 2.5rem;
         padding-right: 2.5rem;
@@ -88,16 +88,16 @@ st.markdown("""
         font-family: 'Noto Serif JP', serif;
         font-weight: 700;
         font-size: 2rem;
-        color: #e5ecf6;
+        color: #0f172a;
         text-align: center;
-        margin-bottom: 2rem;
-        letter-spacing: 0.1em;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.08em;
     }
     
     /* 通常のタイトル（h1）：中央揃え */
     h1 {
         text-align: center;
-        color: #e5ecf6;
+        color: #0f172a;
         font-size: 1.9rem;
         margin-bottom: 2rem;
         font-family: 'Noto Sans JP', sans-serif;
@@ -134,16 +134,16 @@ st.markdown("""
     /* ボタン本体のスタイル */
     div.stButton > button {
         border-radius: 14px;
-        border: 1px solid #1d3f80;
-        background: linear-gradient(180deg, #1b3c76 0%, #123066 100%);
-        color: #e5ecf6;
+        border: 1px solid #e2e8f0;
+        background: linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+        color: #0f172a;
         width: 100% !important;
         max-width: 420px !important;
         height: 150px !important;
         min-height: 150px !important;
         margin: 0 auto !important;
         font-size: 17px;
-        font-weight: 600;
+        font-weight: 700;
         letter-spacing: 0.01em;
         transition: all 0.2s ease;
         display: flex !important;
@@ -151,15 +151,16 @@ st.markdown("""
         justify-content: center !important;
         padding: 0 22px !important;
         text-align: center;
-        box-shadow: 0 18px 45px rgba(6, 13, 26, 0.28);
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
     }
 
     /* ホバー効果 */
     div.stButton > button:hover {
-        border-color: #2a58a2;
-        background: linear-gradient(180deg, #245092 0%, #1a3e78 100%);
-        color: #f5f7fb;
+        border-color: #0f4c81;
+        background: linear-gradient(180deg, #fdf7e3 0%, #f6fbff 100%);
+        color: #0b1f3a;
         transform: translateY(-3px);
+        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
     }
 
     /* ボタン内のテキスト */
@@ -183,11 +184,11 @@ st.markdown("""
     /* 入力要素とフォーム */
     [data-testid="stForm"] > div {
         width: 100%;
-        background: #0f213f;
-        border: 1px solid #1e3c70;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
         border-radius: 16px;
         padding: 1.5rem !important;
-        box-shadow: 0 16px 40px rgba(2, 6, 16, 0.45);
+        box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
     }
 
     label p {
@@ -197,10 +198,10 @@ st.markdown("""
 
     .stTextInput input, .stTextArea textarea {
         border-radius: 10px !important;
-        border: 1px solid #1e3c70 !important;
+        border: 1px solid #cbd5e1 !important;
         padding: 0.75rem 0.85rem !important;
-        background: #0c1b35 !important;
-        color: #e5ecf6 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
     }
 
     .stSlider [role="slider"] {
