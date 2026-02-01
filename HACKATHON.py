@@ -342,8 +342,8 @@ elif st.session_state.page == 'application':
 
 
     # --- 「最適な引き継ぎ先の確認・情報リセット」画面 ---
-    if os.path.isfile("tasks.csv") and os.path.isfile("tasks2.csv"):
-        df1 = pd.read_csv("tasks.csv")
+    if os.path.isfile("tasks1.csv") and os.path.isfile("tasks2.csv"):
+        df1 = pd.read_csv("tasks1.csv")
         df2 = pd.read_csv("tasks2.csv")
 
         st.subheader("📊 最適な引き継ぎ先一覧")
@@ -358,7 +358,7 @@ elif st.session_state.page == 'application':
             st.warning("条件を満たす組み合わせが見つかりませんでした。評価を緩めるか、回答を増やしてください。")
 
     else:
-        st.error("データが見つかりません。tasks.csv と tasks2.csv の両方が必要です。")
+        st.error("データが見つかりません")
     
     st.divider()
     
