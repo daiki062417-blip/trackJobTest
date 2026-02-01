@@ -156,7 +156,7 @@ elif st.session_state.page == 'task_list':
         st.dataframe(df1,use_container_width=True )
         st.info(f"現在、{len(df1)}件のタスクが登録されています。")
     else:
-        st.warming("まだ登録されたタスクはありません")
+        st.warning("まだ登録されたタスクはありません")
 
     
 #「引き継ぎ希望申請」の画面
@@ -165,7 +165,6 @@ elif st.session_state.page == 'task_list':
 
 
 #『最適な引き継ぎ先の確認・情報リセット」の画面
-
 #画面部分のコード
 elif st.session_state.page == 'results_reset':
     st.title("最適な引き継ぎ先の確認・情報リセット")
@@ -210,9 +209,6 @@ elif st.session_state.page == 'application':
         navigate_to('main')
         st.rerun()
 
-# --- 「最適な引き継ぎ先の確認・情報リセット」画面 ---
-elif st.session_state.page == 'results_reset':
-    st.title("🧹 最適な引き継ぎ先の確認・情報リセット")
-    if st.button("🏠 ホームに戻る"):
+
         navigate_to('main')
         st.rerun()
