@@ -71,12 +71,12 @@ st.markdown("""
         font-family: 'Noto Sans JP', sans-serif;
     }
     
-    /* コンテナの幅を少し狭めて中央に寄せる */
+    /* コンテナを中央揃えに */
     .main .block-container {
         max-width: 600px;
         padding-top: 5rem;
+        margin: 0 auto;
     }
-
     /* タイトル：装飾を消してシンプルに */
     h1 {
         text-align: center;
@@ -85,24 +85,35 @@ st.markdown("""
         margin-bottom: 2rem;
     }
 
-    /* ボタンのスタイル：フラットでシンプルな横長 */
+     /* ボタンコンテナを中央揃えに */
+    .stButton {
+        display: flex;
+        justify-content: center;  /* 中央揃え */
+        margin: 0 auto;
+    }
+            
+
+
+     /* ボタンのスタイル */
     div.stButton > button {
         border-radius: 8px;
         border: 1px solid #eee;
         background-color: #fafafa;
         color: #444;
         width: 100%;
-        height: 55px !important; /* 押しやすい適度な高さ */
-        margin-bottom: 12px;
+        max-width: 500px;  /* 最大幅を設定 */
+        height: 55px !important;
+        margin: 0 auto 12px auto;  /* 中央揃え + 下マージン */
         font-size: 16px;
         transition: all 0.2s ease;
         display: flex !important;
         align-items: center !important;
-        justify-content: flex-start !important; /* 左寄せ */
-        padding-left: 25px !important;
+        justify-content: center !important;
+        padding: 0 !important;
     }
 
-    /* ホバー：色は変えず、影と境界線だけで「押せる感」を出す */
+
+    /* ホバー*/
     div.stButton > button:hover {
         border-color: #bbb;
         background-color: #f0f0f0;
@@ -112,9 +123,11 @@ st.markdown("""
 
     /* アイコン（絵文字）のサイズ調整 */
     div.stButton > button p {
-        font-size: 1.2rem !important;
-        margin-right: 15px !important;
-        margin-top: 0 !important;
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center !important;
     }
             
     /* タブレット・スマホ（768px以下）向けの微調整 */
@@ -138,29 +151,29 @@ if 'page' not in st.session_state:
 def navigate_to(page_name):
     st.session_state.page = page_name
 
-# --- ホーム画面（リスト形式） ---
+#ホーム画面（リスト形式
 if st.session_state.page == 'main':
     st.markdown("<h1>引き継ぎ管理システム</h1>", unsafe_allow_html=True)
     
     # 縦一列にシンプルに配置
-    if st.button("📥タスクを入力する"):
+    if st.button("📥 タスクを入力する"):
         navigate_to('task_input')
         st.rerun()
         
-    if st.button("📋タスク一覧を確認する"):
+    if st.button("📋 タスク一覧を確認する"):
         navigate_to('task_list')
         st.rerun()
         
-    if st.button("🙋引き継ぎ希望を申請する"):
+    if st.button("🙋 引き継ぎ希望を申請する"):
         navigate_to('application')
         st.rerun()
         
-    if st.button("🧹マッチング結果・リセット"):
+    if st.button("🧹 マッチング結果・リセット"):
         navigate_to('results_reset')
         st.rerun()
 
 
-# --- 「タスク入力」画面 ---
+#「タスク入力」画面
 elif st.session_state.page == 'task_input':
     st.title("📥 タスク入力")
     
@@ -212,7 +225,7 @@ elif st.session_state.page == 'task_list':
     else:
         st.warning("まだ登録されたタスクはありません")
 
-# --- 「引き継ぎ希望申請」画面 ---
+# 「引き継ぎ希望申請」画面
 elif st.session_state.page == 'application':
     st.title("🙋 引き継ぎ希望申請")
     
