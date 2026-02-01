@@ -4,11 +4,11 @@ import os
 import itertools
 
 #先にモデルを組む
-def solve_matching(app_df, tasks_df):
+def solve_matching(df2, df1):
     w1, w2, w3 = 0.5, 3.0, 1.0
 
     valid_candidates = []
-    for _, row in app_df.iterrows():
+    for _, row in df2.iterrows():
         t_eval = row['タスクの内容に関する10段階評価']
         p_eval = row['引き継ぎ相手に関する10段階評価']
         s_eval = row['スケジュールに関する評価']
@@ -24,8 +24,8 @@ def solve_matching(app_df, tasks_df):
             'score': score
         })
     
-    all_tasks = tasks_df['タスク名'].unique()
-    all_people = app_df['人名'].unique()
+    all_tasks = df1['タスク名'].unique()
+    all_people = df2['人名'].unique()
     
     best_total_score = -1
     best_combination = []
@@ -182,7 +182,7 @@ elif st.session_state.page == 'task_input':
                 [[task_name, task_detail, task_date, task_assignee]], 
                 columns=["タスク名", "タスクの詳細", "タスクを行う時期・日時", "引き継ぎ担当者"]
             )
-            DATA_FILE = "tasks.csv"
+            DATA_FILE = "tasks1.csv"
 
             if not os.path.isfile(DATA_FILE):
                 data.to_csv(DATA_FILE, index=False, encoding='utf-8-sig')
@@ -205,8 +205,8 @@ elif st.session_state.page == 'task_list':
         navigate_to('main')
         st.rerun()
 
-    if os.path.isfile("tasks.csv"):
-        df1 = pd.read_csv("tasks.csv")
+    if os.path.isfile("tasks1.csv"):
+        df1 = pd.read_csv("tasks1.csv")
         st.dataframe(df1, use_container_width=True)
         st.info(f"現在、{len(df1)}件のタスクが登録されています。")
     else:
@@ -223,13 +223,13 @@ elif st.session_state.page == 'application':
     st.title("引継ぎ希望申請")
 
     #登録タスクの表示
-    if os.path.isfile("tasks.csv"):
+    if os.path.isfile("tasks1.csv"):
 
             #人名
             name = st.text_input("名前")
 
             #ファイル読み込み
-            df1 = pd.read_csv("tasks.csv")
+            df1 = pd.read_csv("tasks1.csv")
 
             #全タスクの評価欄を表示
             for i in range(len(df1)):
@@ -295,8 +295,8 @@ elif st.session_state.page == 'results_reset':
     st.title("最適な引き継ぎ先の確認・情報リセット")
     if st.button("🏠 ホームに戻る"):
         st.session_state.page = 'main'
-    if os.path.isfile("tasks.csv") and os.path.isfile("tasks2.csv"):
-        df1 = pd.read_csv("tasks.csv")
+    if os.path.isfile("tasks1.csv") and os.path.isfile("tasks2.csv"):
+        df1 = pd.read_csv("tasks1.csv")
         df2 = pd.read_csv("tasks2.csv")
 
         st.subheader("📊 最適な引き継ぎ先一覧")
@@ -316,8 +316,8 @@ elif st.session_state.page == 'results_reset':
     st.divider()
     
     if st.button("🗑️ データのリセット", type="secondary"):
-        if os.path.exists("tasks.csv"): 
-            os.remove("tasks.csv")
+        if os.path.exists("tasks1.csv"): 
+            os.remove("tasks1.csv")
         if os.path.exists("tasks2.csv"): 
             os.remove("tasks2.csv")
         st.warning("全てのデータを削除しました。")
