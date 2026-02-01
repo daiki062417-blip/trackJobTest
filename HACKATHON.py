@@ -22,8 +22,8 @@ def solve_matching(app_df, tasks_df):
 
     valid_candidates = []
     for _, row in app_df.iterrows():
-        t_eval = row['タスクの内容に関する10段階評価']
-        p_eval = row['引き継ぎ相手に関する10段階評価']
+        t_eval = row['タスクの内容に関する評価']
+        p_eval = row['引き継ぎ相手に関する評価']
         s_eval = row['スケジュールに関する評価']
         
         # あなたが指定した「足切り条件」
