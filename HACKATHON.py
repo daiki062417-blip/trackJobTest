@@ -191,17 +191,33 @@ st.markdown("""
         box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
     }
 
+    /* ラベルと入力を全幅に */
+    [data-testid="stForm"] label {
+        width: 100% !important;
+    }
+
     label p {
         font-weight: 600 !important;
         color: #0f172a !important;
     }
 
+    .stTextInput, .stTextArea {
+        width: 100% !important;
+    }
+
     .stTextInput input, .stTextArea textarea {
         border-radius: 10px !important;
         border: 1px solid #cbd5e1 !important;
-        padding: 0.75rem 0.85rem !important;
+        padding: 0.85rem 1rem !important;
         background: #ffffff !important;
         color: #0f172a !important;
+        width: 100% !important;
+        min-height: 48px;
+    }
+
+    /* テキストエリアの高さを少し拡張 */
+    .stTextArea textarea {
+        min-height: 120px !important;
     }
 
     .stSlider [role="slider"] {
