@@ -93,6 +93,15 @@ st.markdown("""
         margin-bottom: 1.5rem;
         letter-spacing: 0.08em;
     }
+
+    .custom-subtitle {
+        text-align: center;
+        color: #334155;
+        font-size: 1rem;
+        margin-top: -0.5rem;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.02em;
+    }
     
     /* 通常のタイトル（h1）：中央揃え */
     h1 {
@@ -131,7 +140,7 @@ st.markdown("""
         margin: 0 auto 12px auto !important;
     }
 
-    /* ボタン本体のスタイル */
+    /* ボタン本体のベーススタイル（通常サイズ） */
     div.stButton > button {
         border-radius: 14px;
         border: 1px solid #e2e8f0;
@@ -139,19 +148,19 @@ st.markdown("""
         color: #0f172a;
         width: 100% !important;
         max-width: 420px !important;
-        height: 150px !important;
-        min-height: 150px !important;
+        height: 52px !important;
+        min-height: 52px !important;
         margin: 0 auto !important;
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 700;
         letter-spacing: 0.01em;
         transition: all 0.2s ease;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        padding: 0 22px !important;
+        padding: 0 18px !important;
         text-align: center;
-        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
     }
 
     /* ホバー効果 */
@@ -160,7 +169,7 @@ st.markdown("""
         background: linear-gradient(180deg, #fdf7e3 0%, #f6fbff 100%);
         color: #0b1f3a;
         transform: translateY(-3px);
-        box-shadow: 0 18px 42px rgba(15, 23, 42, 0.18);
+        box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
     }
 
     /* ボタン内のテキスト */
@@ -224,6 +233,16 @@ st.markdown("""
         background: #0f766e !important;
     }
 
+    /* フォームの提出ボタンをやや大きく */
+    [data-testid="stFormSubmitButton"] > button {
+        height: 64px !important;
+        min-height: 64px !important;
+        max-width: 360px !important;
+        font-size: 16px !important;
+        padding: 0 18px !important;
+        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.14);
+    }
+
     /* データフレームの余白 */
     .stDataFrame {
         border-radius: 14px;
@@ -242,8 +261,30 @@ st.markdown("""
     }
 
     .home-grid .stButton button {
-        height: 180px !important;
-        min-height: 180px !important;
+        height: 150px !important;
+        min-height: 150px !important;
+        font-size: 17px;
+        box-shadow: 0 16px 36px rgba(15, 23, 42, 0.12);
+    }
+
+    /* 小さめの戻るボタン */
+    .small-back button {
+        height: 44px !important;
+        min-height: 44px !important;
+        max-width: 220px !important;
+        font-size: 14px !important;
+        padding: 0 16px !important;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08);
+    }
+
+    /* 大きめの提出ボタン */
+    .large-submit button {
+        height: 64px !important;
+        min-height: 64px !important;
+        max-width: 360px !important;
+        font-size: 16px !important;
+        padding: 0 18px !important;
+        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.14);
     }
 
     /* タブレット・スマホ（768px以下）向けの微調整 */
@@ -267,8 +308,8 @@ st.markdown("""
         div.stButton > button {
             width: 100% !important;
             max-width: 100% !important;
-            height: 150px !important;
-            min-height: 150px !important;
+            height: 140px !important;
+            min-height: 140px !important;
             font-size: 15px;
         }
     }
@@ -286,6 +327,7 @@ def navigate_to(page_name):
 if st.session_state.page == 'main':
     # カスタムフォントのタイトル
     st.markdown("<h1 class='custom-title'>引き継ぎ管理システム</h1>", unsafe_allow_html=True)
+    st.markdown("<div class='custom-subtitle'>サークルや団体の引き継ぎをストレスフリーに</div>", unsafe_allow_html=True)
     
     # 中央揃え用のコンテナを作成
     st.markdown("<div class='home-grid'>", unsafe_allow_html=True)
@@ -348,10 +390,6 @@ elif st.session_state.page == 'task_input':
 # --- 「タスク一覧」画面 ---
 elif st.session_state.page == 'task_list':
     st.title("📋 タスク一覧")
-    
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
-        st.rerun()
 
     if os.path.isfile("tasks.csv"):
         df1 = pd.read_csv("tasks.csv")
@@ -360,14 +398,17 @@ elif st.session_state.page == 'task_list':
     else:
         st.warning("まだ登録されたタスクはありません")
 
+    # 下部に戻るボタン（小さめ）
+    col_back = st.columns([1,1,1,1,1])
+    with col_back[2]:
+        if st.button("🏠 ホームに戻る", key="task_list_back", help="ホームへ戻る"):
+            navigate_to('main')
+            st.rerun()
+
 # 「引き継ぎ希望申請」画面
 elif st.session_state.page == 'application':
     st.title("🙋 引き継ぎ希望申請")
     
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
-        st.rerun()
-
     # 登録タスクの表示
     if os.path.isfile("tasks.csv"):
         df = pd.read_csv("tasks.csv")
@@ -380,7 +421,7 @@ elif st.session_state.page == 'application':
         
         st.divider()
 
-        with st.form(key='evaluate_form'):
+        with st.form(key='evaluate_form', clear_on_submit=False):
             st.subheader("📊 評価入力")
             
             # スライダーで10段階評価する
@@ -395,7 +436,7 @@ elif st.session_state.page == 'application':
             )
 
             # 提出ボタン
-            submitted = st.form_submit_button("提出")
+            submitted = st.form_submit_button("提出", help="評価を送信", on_click=None, use_container_width=True, type="primary")
 
             # 保存処理
             if submitted:
@@ -430,16 +471,19 @@ elif st.session_state.page == 'application':
                 # 評価していない項目があれば警告
                 else:
                     st.error("全評価を1~10段階で行ってください。")
+
+        # 下部に戻るボタン（小さめ）
+        col_back2 = st.columns([1,1,1,1,1])
+        with col_back2[2]:
+            if st.button("🏠 ホームに戻る", key="application_back", help="ホームへ戻る"):
+                navigate_to('main')
+                st.rerun()
     else:
         st.warning("まだ登録されたタスクがありません。先にタスクを登録してください。")
 
 # --- 「最適な引き継ぎ先の確認・情報リセット」画面 ---
 elif st.session_state.page == 'results_reset':
     st.title("🧹 最適な引き継ぎ先の確認・情報リセット")
-
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
-        st.rerun()
 
     if os.path.isfile("tasks.csv") and os.path.isfile("tasks2.csv"):
         df1 = pd.read_csv("tasks.csv")
@@ -461,10 +505,16 @@ elif st.session_state.page == 'results_reset':
     
     st.divider()
     
-    if st.button("🗑️ データのリセット", type="secondary"):
-        if os.path.exists("tasks.csv"): 
-            os.remove("tasks.csv")
-        if os.path.exists("tasks2.csv"): 
-            os.remove("tasks2.csv")
-        st.warning("全てのデータを削除しました。")
-        st.rerun()
+    col_reset, col_back, col_empty = st.columns([1,1,1])
+    with col_reset:
+        if st.button("🗑️ データのリセット", type="secondary"):
+            if os.path.exists("tasks.csv"): 
+                os.remove("tasks.csv")
+            if os.path.exists("tasks2.csv"): 
+                os.remove("tasks2.csv")
+            st.warning("全てのデータを削除しました。")
+            st.rerun()
+    with col_back:
+        if st.button("🏠 ホームに戻る", key="results_back", help="ホームへ戻る"):
+            navigate_to('main')
+            st.rerun()
