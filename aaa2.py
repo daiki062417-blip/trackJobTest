@@ -1,64 +1,69 @@
-elif st.session_state.page == 'application':
-    st.title("🙋 引き継ぎ希望申請")
-    if st.button("🏠 ホームに戻る"):
-        navigate_to('main')
-        st.rerun()
-    
-    st.title("引継ぎ希望申請")
+import streamlit as st
+import pandas as pd
+import os
 
-    #登録タスクの表示
-    if os.path.isfile("tasks.csv"):
+#登録タスクの表示
+if os.path.isfile("tasks.csv"):
 
-            #ファイル読み込み
-            df = pd.read_csv("tasks.csv")
+        #人名
+        name = st.text_input("名前")
 
-            st.write("タスク名: " +str( df.loc[0, "タスク名"]) ) 
-            st.write("タスクの詳細: " + str( df.loc[0, "タスクの詳細"] ) )
-            st.write("タスクを行う時期・日時: " + str( df.loc[0, "タスクを行う時期・日時"] ) )
-            st.write("引き継ぎ担当者: " +str(  df.loc[0, "引き継ぎ担当者"] ) )
-                
+        #ファイル読み込み
+        df = pd.read_csv("tasks.csv")
 
-    with st.form(key='evaluate_form'):
+        #全タスクの評価を保存する配列
+        #0: タスク評価, 1: 相手評価, 2: スケジュール評価
+        dataList = [[]] 
 
-        #スライダーで10段階評価する
-        contentValue = st.slider(
-            'タスクの内容に関する評価', 0, 10, key='content'
-        )
-        personValue = st.slider(
-            '引継ぎ相手に関する評価', 0, 10, key='person'
-        )
-        scheduleValue = st.slider(
-            'スケジュールに関する評価', 0, 10, key='schedule'
-        )
+        #全タスクの評価欄を表示
+        for i in range(len(df)):
 
-        #提出ボタン
-        submitted = st.form_submit_button("提出")
+            #タスク表示
+            st.write("タスク名: " +str( df.loc[i, "タスク名"]) ) 
+            st.write("タスクの詳細: " + str( df.loc[i, "タスクの詳細"] ) )
+            st.write("タスクを行う時期・日時: " + str( df.loc[i, "タスクを行う時期・日時"] ) )
+            st.write("引き継ぎ担当者: " +str(  df.loc[i, "引き継ぎ担当者"] ) )
 
-        #保存処理
-        if submitted:
-            if contentValue * personValue * scheduleValue != 0:
-                #csvにデータを書き込み
-                DATA_FILE2 = "tasks2.csv"
+            #提出フォーム
+            with st.form(key='evaluate_form' + str(i)):
 
-                #評価データ
-                if os.path.isfile("tasks2.csv"):
-                    personIndex = len(pd.read_csv("tasks2.csv"))
-                else :
-                    personIndex = 1
-                data2 = pd.DataFrame(
-                        [["匿名"+str(personIndex), contentValue, personValue, scheduleValue]], 
-                        columns=["評価者","内容評価値","人評価値", "日程評価値"]
-                    )  
+                #スライダーで10段階評価する
+                contentValue = st.slider(
+                    'タスクの内容に関する評価', 0, 10, key='content'+str(i)
+                )
+                personValue = st.slider(
+                    '引継ぎ相手に関する評価', 0, 10, key='person'+str(i)
+                )
+                scheduleValue = st.slider(
+                    'スケジュールに関する評価', 0, 10, key='schedule'+str(i)
+                )
 
-                if not os.path.isfile(DATA_FILE2):
-                    data2.to_csv(DATA_FILE2, index=False, encoding='utf-8-sig')
-                else:
-                    data2.to_csv(DATA_FILE2, mode='a', header=False, index=False, encoding='utf-8-sig')
+                #提出ボタン
+                submitted = st.form_submit_button("提出")
 
-                 #成功表示
-                st.success("評価が完了しました。")
-                st.balloons()
-     
-            #評価していない項目があれば警告
-            else:
-                st.error("全評価を1~10段階で行ってください。")
+                #保存処理
+                if submitted:
+                    if contentValue * personValue * scheduleValue != 0:
+                        
+                        #成功表示
+                        st.success("評価が完了しました。")
+                        st.balloons()
+                        
+                        #評価データ
+                        data2 = pd.DataFrame(
+                                [[name, str( df.loc[i, "タスク名"]), contentValue, personValue, scheduleValue]], 
+                                columns=["人名","タスク名","タスクの内容に関する10段階評価","引き継ぎ相手に関する10段階評価", "スケジュールに関する評価"]
+                            )  
+
+                        #csvにデータを書き込み
+                        DATA_FILE2 = "tasks2.csv"
+
+                        if not os.path.isfile(DATA_FILE2):
+                            data2.to_csv(DATA_FILE2, index=False, encoding='utf-8-sig')
+                        else:
+                            data2.to_csv(DATA_FILE2, mode='a', header=False, index=False, encoding='utf-8-sig')
+                    
+                    #評価していない項目があれば警告
+                    else:
+                        st.error("全評価を1~10段階で行ってください。")
+            
